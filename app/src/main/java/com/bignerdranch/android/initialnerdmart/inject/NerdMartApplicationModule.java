@@ -21,7 +21,7 @@ import dagger.Provides;
  *
  * @Singleton for the Datastore: tells dagger 2 you want it to be the same instance each time
  */
-@Module
+@Module(includes = { NerdMartCommonModule.class, NerdMartServiceModule.class })
 public class NerdMartApplicationModule {
 
     private Context mApplicationContext;
@@ -31,27 +31,8 @@ public class NerdMartApplicationModule {
     }
 
     @Provides
-    @Singleton
-    DataStore providesDataStore() {
-        return new DataStore();
-    }
-
-    @Provides
-    NerdMartServiceInterface providesNerdMartServiceInterface() {
-        return new NerdMartService();
-    }
-
-    @Provides
-    @Singleton
-    NerdMartServiceManager providesNerdMartServiceManager(
-            NerdMartServiceInterface serviceInterface, DataStore dataStore) {
-        return new NerdMartServiceManager(serviceInterface, dataStore);
-    }
-
-    @Provides
-    NerdMartViewModel providesNerdMartViewModel(DataStore dataStore) {
-        return new NerdMartViewModel(mApplicationContext,
-                dataStore.getCachedCart(), dataStore.getCachedUser());
+    public Context providesContext() {
+        return mApplicationContext;
     }
 
 }
